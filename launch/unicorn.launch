@@ -1,0 +1,57 @@
+<launch>
+  <arg name="model" default="$(find unicorn_model)/urdf/unicorn.urdf"/>
+  <arg name="rvizconfig" default="$(find unicorn_model)/rviz/urdf_config.rviz"/>
+  <arg name="world" default="worlds/empty.world"/>
+  <arg name="gui" default="true"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="teleop" default="true"/>
+
+  <param name="use_sim_time" value="$(arg use_sim_time)"/>
+
+  <!-- Load robot description -->
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+  <!-- Gazebo -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+  </include>
+
+  <!-- Spawn unicorn -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+        args="-param robot_description -urdf -model unicorn -x 0 -y 0 -z 0.05"
+        output="screen"/>
+
+  <!-- Robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <param name="publish_frequency" value="30.0"/>
+  </node>
+
+  <!-- Joint state publisher -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+  <!-- Controllers -->
+  <rosparam file="$(find unicorn_model)/config/unicorn_control.yaml" command="load" ns="/unicorn"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+        args="--namespace=/unicorn joint_state_controller left_steering_controller right_steering_controller left_rear_wheel_controller right_rear_wheel_controller left_front_wheel_controller right_front_wheel_controller"
+        output="screen"/>
+
+  <!-- cmd_vel + AckermannDriveStamped → joint controller bridge -->
+  <node name="twist_to_joints" pkg="unicorn_model" type="twist_to_joints.py" output="screen">
+    <param name="wheelbase" value="0.325"/>
+    <param name="track_width" value="0.2"/>
+    <param name="wheel_radius" value="0.05"/>
+    <param name="max_steer" value="0.8"/>
+    <param name="robot_ns" value="/unicorn"/>
+    <param name="ackermann_topic" value="/vesc/low_level/ackermann_cmd_mux/output"/>
+  </node>
+
+  <!-- Keyboard teleop (separate xterm window) -->
+  <node if="$(arg teleop)" name="keyboard_teleop" pkg="unicorn_model" type="keyboard_teleop.py"
+        output="screen" launch-prefix="gnome-terminal --"/>
+
+  <!-- RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" output="screen"/>
+</launch>
