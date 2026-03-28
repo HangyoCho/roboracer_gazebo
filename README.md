@@ -95,6 +95,11 @@ unicorn_model/
 └── world/           # Gazebo world files
 ```
 
+## Documentation
+
+- [ROS Topics & TF Tree](docs/topics.md)
+- [Vehicle Parameters](docs/vehicle-parameters.md)
+
 ## Dependencies
 
 `setup.sh` installs all dependencies automatically.
