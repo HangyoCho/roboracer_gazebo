@@ -1,62 +1,74 @@
-# 차량 파라미터 변경
+# Vehicle Parameters
 
-## 차체
+## Chassis
 
-**파일**: `urdf/macros.xacro`
+**File**: `urdf/macros.xacro`
 
-| 파라미터 | 위치 | 기본값 | 설명 |
-|----------|------|--------|------|
-| 질량 | `chassis_inertial_params` → `mass` | 4.0 kg | 차체 무게 |
-| 무게중심 | `chassis_inertial_params` → `origin xyz` | 0.1477 0 0 | CoG (m) |
+| Parameter | Location | Default | Description |
+|-----------|----------|---------|-------------|
+| Mass | `chassis_inertial_params` -> `mass` | 4.0 kg | Chassis weight |
+| Center of gravity | `chassis_inertial_params` -> `origin xyz` | 0.1477 0 0 | CoG position (m) |
 
-## 휠베이스 / 트랙
+## Wheelbase / Track
 
-**파일**: `urdf/unicorn.urdf`
+**File**: `urdf/unicorn.urdf`
 
-| 파라미터 | 기본값 | 설명 |
-|----------|--------|------|
-| 휠베이스 | 0.325 m | `*_steering_hinge_joint` origin x |
-| 트랙 폭 | 0.2 m | `*_wheel_joint` / `*_steering_hinge_joint` origin y (±0.1) |
-| 최대 조향각 | ±1.0 rad | `*_steering_hinge_joint` limit |
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| Wheelbase | 0.325 m | `*_steering_hinge_joint` origin x |
+| Track width | 0.2 m | `*_wheel_joint` / `*_steering_hinge_joint` origin y (±0.1) |
+| Max steering angle | ±1.0 rad | `*_steering_hinge_joint` limit |
 
-## 바퀴
+## Wheels
 
-**파일**: `urdf/macros.xacro`
+**File**: `urdf/macros.xacro`
 
-| 파라미터 | 기본값 | 설명 |
-|----------|--------|------|
-| 질량 | 0.34 kg | `*_wheels_inertial_params` → mass |
-| 반지름 | 0.05 m | `*_wheels_collision_geometry` → cylinder radius |
-| 폭 | 0.045 m | `*_wheels_collision_geometry` → cylinder length |
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| Mass | 0.34 kg | `*_wheels_inertial_params` -> mass |
+| Radius | 0.05 m | `*_wheels_collision_geometry` -> cylinder radius |
+| Width | 0.045 m | `*_wheels_collision_geometry` -> cylinder length |
 
-## 마찰 / 접촉
+## Friction / Contact
 
-**파일**: `urdf/unicorn.gazebo`
+**File**: `urdf/unicorn.gazebo`
 
-| 파라미터 | 기본값 | 설명 |
-|----------|--------|------|
-| mu1, mu2 | 1.0 | Coulomb 마찰 계수 |
-| kp | 10000000 | 접촉 강성 (N/m) |
-| kd | 1.0 | 접촉 감쇠 |
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| mu1, mu2 | 1.5 | Coulomb friction coefficients |
+| kp | 1,000,000 | Contact stiffness (N/m) |
+| kd | 100.0 | Contact damping |
+| minDepth | 0.001 | Minimum contact penetration depth |
 
-## 컨트롤러 PID
+## Joint Dynamics
 
-**파일**: `config/unicorn_control.yaml`
+**File**: `urdf/unicorn.urdf`
 
-| 파라미터 | 기본값 | 설명 |
-|----------|--------|------|
-| 스티어링 PID | p=10 i=0 d=0 | 조향 위치 제어 |
-| 휠 PID | p=10 i=0 d=0 | 구동 속도 제어 |
+| Joint | Damping | Friction | Description |
+|-------|---------|----------|-------------|
+| Wheel joints (x4) | 0.02 | 0.0 | Rolling resistance |
+| Steering joints (x2) | 0.02 | 0.0 | Steering damping |
+
+## Controller PID
+
+**File**: `config/unicorn_control.yaml`
+
+| Controller | Type | PID | Description |
+|------------|------|-----|-------------|
+| Steering | JointPositionController | p=10 i=0 d=0.5 | Steering position control |
+| Wheels | JointVelocityController | p=10 i=0 d=0 | Drive velocity control |
 
 ## Livox Mid-360
 
-**파일**: `urdf/unicorn.urdf` (인라인 설정)
+**File**: `urdf/unicorn.urdf` (inline config)
 
-| 파라미터 | 기본값 | 설명 |
-|----------|--------|------|
-| `laser_max_range` | 40.0 m | 최대 감지 거리 |
-| `samples` | 20000 | 프레임당 포인트 수 |
-| `update_rate` | 10 Hz | 스캔 주기 |
-| `csv_file_name` | mid360-real-centr.csv | 스캔 패턴 |
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `laser_max_range` | 60.0 m | Maximum detection range |
+| `samples` | 20000 | Points per frame |
+| `update_rate` | 10 Hz | Scan rate |
+| `csv_file_name` | mid360-real-centr.csv | Scan pattern file |
 | `publish_pointcloud_type` | 1 | 0=PointCloud, 1=PointCloud2(XYZ), 2=PointCloud2(XYZRTL), 3=CustomMsg |
-| 마운트 위치 | x=0.1 y=0 z=0.08 | base_link 기준 |
+| Mount position | x=0.26 y=0 z=0.08 | Relative to base_link |
+| IMU noise | 0.0 | Gaussian noise (disabled for sim) |
+| LiDAR noise stddev | 0.001 | Range measurement noise |
