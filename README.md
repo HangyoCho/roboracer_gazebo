@@ -8,7 +8,6 @@ Gazebo simulation package for a 1/10 scale autonomous racing vehicle equipped wi
 - **Livox Mid-360 LiDAR** — Non-repetitive scan pattern, PointCloud2 output (10Hz, 20k pts/frame)
 - **IMU** — 200Hz built-in IMU sensor on the LiDAR frame
 - **Ground Truth Publisher** — Broadcasts `map -> base_link` TF, publishes `base_pose` and `base_odom`
-- **Keyboard Teleop** — Drive the vehicle from a separate terminal
 - **Joystick Support** — Deadman switch + analog stick control via joy_node
 - **ICRA Racetrack** — Pre-built racing course world
 - **Multi-Agent** — Supports spawning two vehicles simultaneously
@@ -49,19 +48,6 @@ roslaunch unicorn_model dual_unicorn.launch
 # Headless (no GUI)
 roslaunch unicorn_model unicorn.launch gui:=false
 ```
-
-## Keyboard Control
-
-A teleop terminal opens automatically on launch.
-
-| Key | Action |
-|-----|--------|
-| `w` | Accelerate forward |
-| `s` | Accelerate backward |
-| `a` | Steer left |
-| `d` | Steer right |
-| `r` | Stop |
-| `q` | Quit |
 
 ## Topics
 
