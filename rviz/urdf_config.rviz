@@ -223,6 +223,34 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
+    - Alpha: 0.800000011920929
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 46.52684783935547
+        Min Value: -1.1032452583312988
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 0
+      Color Transformer: AxisColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: PCD Map
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: false
+      Size (Pixels): 2
+      Size (m): 0.029999999329447746
+      Style: Points
+      Topic: /pcd_map
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
     - Alpha: 1
       Class: rviz/Axes
       Enabled: false
@@ -267,6 +295,14 @@ Visualization Manager:
       Topic: /glim_ros/base_odom
       Unreliable: false
       Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /global_waypoints/markers
+      Name: MarkerArray
+      Namespaces:
+        "": true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -285,7 +321,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 66.26397705078125
+      Distance: 8.79878044128418
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -293,9 +329,9 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.25004544854164124
-        Y: -8.589550018310547
-        Z: 7.855107307434082
+        X: 1.2154643535614014
+        Y: -3.289623260498047
+        Z: 6.067480564117432
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -314,4 +350,4 @@ Window Geometry:
   QMainWindow State: 000000ff00000000fd000000010000000000000156000002f4fc0200000001fb000000100044006900730070006c006100790073010000003d000002f4000000c900ffffff000002dc000002f400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Width: 1080
   X: 3840
-  Y: 0
+  Y: 492
