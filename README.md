@@ -1,19 +1,17 @@
-# Unicorn Racing Vehicle
+# Roboracer Gazebo Simulation
 
-<p align="center">
-  <img src="meshes/chassis.dae" width="400" alt="Unicorn Vehicle"/>
-</p>
-
-Livox Mid-360 LiDAR를 장착한 1/10 스케일 자율주행 레이싱 차량의 Gazebo 시뮬레이션 패키지입니다.
+Gazebo simulation package for a 1/10 scale autonomous racing vehicle equipped with a Livox Mid-360 LiDAR.
 
 ## Features
 
-- **Ackermann Steering** — 실차와 동일한 조향 기구학
-- **Livox Mid-360** — 비정형 스캔 패턴의 PointCloud2 출력 (10Hz, 20k pts/frame)
-- **IMU** — 200Hz 내장 IMU 센서
-- **키보드 텔레옵** — 별도 터미널에서 즉시 조작 가능
-- **멀티 에이전트** — 2대 동시 스폰 지원
-- **커스텀 월드** — 레이싱 코스 맵 포함
+- **Ackermann Steering** — Realistic steering kinematics with inner/outer wheel differentiation
+- **Livox Mid-360 LiDAR** — Non-repetitive scan pattern, PointCloud2 output (10Hz, 20k pts/frame)
+- **IMU** — 200Hz built-in IMU sensor on the LiDAR frame
+- **Ground Truth Publisher** — Broadcasts `map -> base_link` TF, publishes `base_pose` and `base_odom`
+- **Keyboard Teleop** — Drive the vehicle from a separate terminal
+- **Joystick Support** — Deadman switch + analog stick control via joy_node
+- **ICRA Racetrack** — Pre-built racing course world
+- **Multi-Agent** — Supports spawning two vehicles simultaneously
 
 ## Prerequisites
 
@@ -24,11 +22,9 @@ Livox Mid-360 LiDAR를 장착한 1/10 스케일 자율주행 레이싱 차량의
 ## Installation
 
 ```bash
-# 워크스페이스에 클론
 mkdir -p ~/ws_gazebo_roboracer/src && cd ~/ws_gazebo_roboracer/src
-git clone <repo-url> unicorn_model
+git clone git@github.com:HangyoCho/roboracer_gazebo.git unicorn_model
 
-# 의존성 설치 + 빌드 (한 번에)
 cd unicorn_model
 ./setup.sh
 
@@ -38,61 +34,77 @@ source ~/ws_gazebo_roboracer/devel/setup.bash
 ## Quick Start
 
 ```bash
-# 단일 차량 (키보드 텔레옵 포함)
+# Single vehicle with keyboard teleop on ICRA racetrack
+roslaunch unicorn_model icra_racetrack.launch
+
+# Single vehicle (default world)
 roslaunch unicorn_model unicorn.launch
 
-# 텔레옵 없이
+# Without teleop
 roslaunch unicorn_model unicorn.launch teleop:=false
 
-# 2대 동시 스폰
+# Two vehicles
 roslaunch unicorn_model dual_unicorn.launch
 
-# GUI 없이 (headless)
+# Headless (no GUI)
 roslaunch unicorn_model unicorn.launch gui:=false
 ```
 
 ## Keyboard Control
 
-launch 시 자동으로 텔레옵 터미널이 열립니다.
+A teleop terminal opens automatically on launch.
 
-| 키 | 동작 |
-|----|------|
-| `w` | 전진 가속 |
-| `s` | 후진 가속 |
-| `a` | 좌회전 |
-| `d` | 우회전 |
-| `r` | 정지 |
-| `q` | 종료 |
+| Key | Action |
+|-----|--------|
+| `w` | Accelerate forward |
+| `s` | Accelerate backward |
+| `a` | Steer left |
+| `d` | Steer right |
+| `r` | Stop |
+| `q` | Quit |
+
+## Topics
+
+| Topic | Type | Description |
+|-------|------|-------------|
+| `/livox/lidar` | `sensor_msgs/PointCloud2` | LiDAR point cloud (10Hz) |
+| `/livox/imu` | `sensor_msgs/Imu` | IMU data (200Hz) |
+| `/glim_ros/base_pose` | `geometry_msgs/PoseStamped` | Ground truth pose (rear axle) |
+| `/glim_ros/base_odom` | `nav_msgs/Odometry` | Ground truth odometry |
+| `/cmd_vel` | `geometry_msgs/Twist` | Velocity command input |
+
+## TF Tree
+
+```
+map -> base_link -> chassis
+                 -> livox_mid360 -> imu
+                                 -> lidar
+```
 
 ## Project Structure
 
 ```
 unicorn_model/
-├── config/          # 컨트롤러 PID 설정
-├── docs/            # 상세 문서 (Topics, 파라미터 등)
-├── launch/          # roslaunch 파일
-├── meshes/          # 3D 모델 (STL, DAE)
-├── scripts/         # 텔레옵, twist→joint 변환
-├── thirdparty/      # 의존 패키지 (Livox-SDK, 플러그인, 드라이버)
-├── urdf/            # 차량 URDF/Xacro 모델
-└── world/           # Gazebo 월드 맵
+├── config/          # Controller PID parameters
+├── docs/            # Detailed documentation
+├── launch/          # Launch files
+├── meshes/          # 3D models (STL, DAE)
+├── scripts/         # Teleop, twist-to-joint bridge, GT publisher, visualization
+├── thirdparty/      # Livox-SDK, LiDAR simulation plugin, ROS driver
+├── urdf/            # Vehicle URDF/Xacro model
+└── world/           # Gazebo world files
 ```
-
-## Documentation
-
-- [ROS Topics & TF Tree](docs/topics.md)
-- [차량 파라미터 변경](docs/vehicle-parameters.md)
 
 ## Dependencies
 
-`setup.sh`가 자동으로 설치합니다.
+`setup.sh` installs all dependencies automatically.
 
-| 패키지 | 구분 | 설명 |
-|--------|------|------|
-| [Livox-SDK](https://github.com/Livox-SDK/Livox-SDK) | thirdparty | C++ SDK (자동 빌드) |
-| [livox_laser_simulation](https://github.com/lzhhh6161/livox_laser_simulation) | thirdparty | Gazebo LiDAR 플러그인 |
-| [livox_ros_driver](https://github.com/Livox-SDK/livox_ros_driver) | thirdparty | ROS 드라이버 |
-| libapr1-dev, libpcl-dev, ros-noetic-pcl-ros | apt | 시스템 라이브러리 |
+| Package | Source | Description |
+|---------|--------|-------------|
+| [Livox-SDK](https://github.com/Livox-SDK/Livox-SDK) | thirdparty | C++ SDK (built from source) |
+| [livox_laser_simulation](https://github.com/lzhhh6161/livox_laser_simulation) | thirdparty | Gazebo LiDAR plugin |
+| [livox_ros_driver](https://github.com/Livox-SDK/livox_ros_driver) | thirdparty | ROS driver |
+| libapr1-dev, libpcl-dev, ros-noetic-pcl-ros | apt | System libraries |
 
 ## License
 
