@@ -65,8 +65,8 @@
     <param name="autorepeat_rate" value="20"/>
   </node>
   <node pkg="unicorn_model" type="joy_to_ackermann.py" name="joy_to_ackermann" output="screen">
-    <param name="max_speed" value="4.0"/>
-    <param name="max_steer" value="0.4"/>
+    <param name="max_speed" value="6.0"/>
+    <param name="max_steer" value="1.08"/>
   </node>
 
   <!-- Ground truth pose at rear axle center -->

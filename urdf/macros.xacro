@@ -4,30 +4,27 @@
 <!-- inertial parameter macros -->
 
 <xacro:macro name="chassis_inertial_params">
-  <!-- CoG at ~half wheelbase forward from rear axle (base_link) -->
-  <origin xyz="0.18 0 0" rpy="0 0 0" />
+  <origin xyz="0.1477 0 0" rpy="0 0 0" />
   <mass value="1.70" />
-  <!-- Box approx: 0.56 x 0.302 x 0.06, m=1.7 -->
-  <inertia ixx="0.01343" ixy="0"          ixz="0"
-                          iyy="0.04494"   iyz="0"
-                                           izz="0.05739" />
+  <inertia ixx="0.004509" ixy="0"          ixz="0"
+                          iyy="0.021424"   iyz="0"
+                                           izz="0.024926" />
 </xacro:macro>
 
 <xacro:macro name="left_wheels_inertial_params">
-  <origin xyz="0 0 -0.013" rpy="0 0 0" />
+  <origin xyz="0 0 -0.0225" rpy="0 0 0" />
   <mass value="0.12" />
-  <!-- Cylinder: r=0.055, h=0.026, m=0.12 -->
-  <inertia ixx="0.0000975" ixy="0"          ixz="0"
-                            iyy="0.0000975" iyz="0"
-                                             izz="0.0001815" />
+  <inertia ixx="0.0000917" ixy="0"          ixz="0"
+                            iyy="0.0000917" iyz="0"
+                                             izz="0.0001452" />
 </xacro:macro>
 
 <xacro:macro name="right_wheels_inertial_params">
-  <origin xyz="0 0 0.013" rpy="0 0 0" />
+  <origin xyz="0 0 0.0225" rpy="0 0 0" />
   <mass value="0.12" />
-  <inertia ixx="0.0000975" ixy="0"          ixz="0"
-                            iyy="0.0000975" iyz="0"
-                                             izz="0.0001815" />
+  <inertia ixx="0.0000917" ixy="0"          ixz="0"
+                            iyy="0.0000917" iyz="0"
+                                             izz="0.0001452" />
 </xacro:macro>
 
 <xacro:macro name="steering_hinge_inertial_params">
@@ -41,9 +38,9 @@
 <xacro:macro name="hokuyo_inertial_params">
   <origin xyz="0 0 0" rpy="0 0 0" />
   <mass value="0.130" />
-  <inertia ixx="4E-06" ixy="0"           ixz="0"
-                            iyy="4E-06"  iyz="0"
-                                              izz="4E-06" />
+  <inertia ixx="2E-06" ixy="0"           ixz="0"
+                            iyy="2E-06"  iyz="0"
+                                              izz="2E-06" />
 </xacro:macro>
 
 <!-- geometry macros -->
@@ -98,16 +95,16 @@
 </xacro:macro>
 
 <xacro:macro name="left_wheels_collision_geometry">
-  <origin xyz="0 0 -0.013" rpy="0 0 0" />
+  <origin xyz="0 0 -0.0225" rpy="0 0 0" />
   <geometry>
-    <cylinder length="0.026" radius="0.055" />
+    <cylinder length="0.045" radius="0.055" />
   </geometry>
 </xacro:macro>
 
 <xacro:macro name="right_wheels_collision_geometry">
-  <origin xyz="0 0 0.013" rpy="0 0 0" />
+  <origin xyz="0 0 0.0225" rpy="0 0 0" />
   <geometry>
-    <cylinder length="0.026" radius="0.055" />
+    <cylinder length="0.045" radius="0.055" />
   </geometry>
 </xacro:macro>
 

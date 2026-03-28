@@ -100,7 +100,7 @@
     <child link="left_steering_hinge" />
     <axis xyz="-1 0 0" />
     <limit lower="-1.08" upper="1.08" effort="50" velocity="100" />
-    <dynamics damping="0.02" friction="0.0"/>
+    <dynamics damping="0.1" friction="0.0"/>
   </joint>
 
   <xacro:steering_hinge_transmission name="left_steering_hinge" />
@@ -121,7 +121,7 @@
     <child link="right_steering_hinge" />
     <axis xyz="-1 0 0" />
     <limit lower="-1.08" upper="1.08" effort="50" velocity="100" />
-    <dynamics damping="0.02" friction="0.0"/>
+    <dynamics damping="0.1" friction="0.0"/>
   </joint>
 
   <xacro:steering_hinge_transmission name="right_steering_hinge" />

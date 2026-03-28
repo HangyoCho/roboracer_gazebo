@@ -81,7 +81,7 @@
     <!-- ICRA Racetrack -->
     <model name='icra_racetrack'>
       <static>1</static>
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 0.15 0 0 0</pose>
       <link name='link'>
         <collision name='collision'>
           <geometry>
