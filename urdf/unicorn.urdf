@@ -29,7 +29,7 @@
   <joint name="base_joint" type="fixed">
     <parent link="base_link"/>
     <child link="base_footprint"/>
-    <origin xyz="0.0 0.0 -0.05" rpy="0 0 0"/>
+    <origin xyz="0.0 0.0 -0.055" rpy="0 0 0"/>
   </joint>
 
   <!-- ==================== Rear Wheels ==================== -->
@@ -48,7 +48,7 @@
   </link>
 
   <joint name="left_rear_wheel_joint" type="continuous">
-    <origin xyz="0 0.1 0" rpy="1.5708 0 0" />
+    <origin xyz="0 0.148 0" rpy="1.5708 0 0" />
     <parent link="chassis" />
     <child link="left_rear_wheel" />
     <axis xyz="0 0 -1" />
@@ -72,7 +72,7 @@
   </link>
 
   <joint name="right_rear_wheel_joint" type="continuous">
-    <origin xyz="0 -0.1 0" rpy="1.5708 0 0" />
+    <origin xyz="0 -0.148 0" rpy="1.5708 0 0" />
     <parent link="chassis" />
     <child link="right_rear_wheel" />
     <axis xyz="0 0 -1" />
@@ -95,12 +95,12 @@
   </link>
 
   <joint name="left_steering_hinge_joint" type="revolute">
-    <origin xyz="0.325 0.1 0" rpy="0 1.5708 0" />
+    <origin xyz="0.360 0.151 0" rpy="0 1.5708 0" />
     <parent link="chassis" />
     <child link="left_steering_hinge" />
     <axis xyz="-1 0 0" />
-    <limit lower="-1.0" upper="1.0" effort="50" velocity="100" />
-    <dynamics damping="0.1" friction="0.0"/>
+    <limit lower="-1.08" upper="1.08" effort="50" velocity="100" />
+    <dynamics damping="0.02" friction="0.0"/>
   </joint>
 
   <xacro:steering_hinge_transmission name="left_steering_hinge" />
@@ -116,12 +116,12 @@
   </link>
 
   <joint name="right_steering_hinge_joint" type="revolute">
-    <origin xyz="0.325 -0.1 0" rpy="0 1.5708 0" />
+    <origin xyz="0.360 -0.151 0" rpy="0 1.5708 0" />
     <parent link="chassis" />
     <child link="right_steering_hinge" />
     <axis xyz="-1 0 0" />
-    <limit lower="-1.0" upper="1.0" effort="50" velocity="100" />
-    <dynamics damping="0.1" friction="0.0"/>
+    <limit lower="-1.08" upper="1.08" effort="50" velocity="100" />
+    <dynamics damping="0.02" friction="0.0"/>
   </joint>
 
   <xacro:steering_hinge_transmission name="right_steering_hinge" />

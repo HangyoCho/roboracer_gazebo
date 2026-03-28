@@ -6,8 +6,8 @@
 
 | Parameter | Location | Default | Description |
 |-----------|----------|---------|-------------|
-| Mass | `chassis_inertial_params` -> `mass` | 4.0 kg | Chassis weight |
-| Center of gravity | `chassis_inertial_params` -> `origin xyz` | 0.1477 0 0 | CoG position (m) |
+| Mass | `chassis_inertial_params` -> `mass` | 1.70 kg | Chassis weight |
+| Center of gravity | `chassis_inertial_params` -> `origin xyz` | 0.18 0 0 | CoG from rear axle (m) |
 
 ## Wheelbase / Track
 
@@ -15,9 +15,10 @@
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| Wheelbase | 0.325 m | `*_steering_hinge_joint` origin x |
-| Track width | 0.2 m | `*_wheel_joint` / `*_steering_hinge_joint` origin y (±0.1) |
-| Max steering angle | ±1.0 rad | `*_steering_hinge_joint` limit |
+| Wheelbase | 360 mm | `*_steering_hinge_joint` origin x |
+| Front track | 302 mm | `*_steering_hinge_joint` origin y (±0.151) |
+| Rear track | 296 mm | `*_rear_wheel_joint` origin y (±0.148) |
+| Max steering angle | ±0.52 rad (~30°) | `*_steering_hinge_joint` limit |
 
 ## Wheels
 
@@ -25,9 +26,9 @@
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| Mass | 0.34 kg | `*_wheels_inertial_params` -> mass |
-| Radius | 0.05 m | `*_wheels_collision_geometry` -> cylinder radius |
-| Width | 0.045 m | `*_wheels_collision_geometry` -> cylinder length |
+| Mass | 0.12 kg | `*_wheels_inertial_params` -> mass |
+| Radius | 55 mm | `*_wheels_collision_geometry` -> cylinder radius |
+| Width | 26 mm | `*_wheels_collision_geometry` -> cylinder length |
 
 ## Friction / Contact
 
@@ -72,3 +73,18 @@
 | Mount position | x=0.26 y=0 z=0.08 | Relative to base_link |
 | IMU noise | 0.0 | Gaussian noise (disabled for sim) |
 | LiDAR noise stddev | 0.001 | Range measurement noise |
+
+## Overall Vehicle Specs
+
+| Spec | Value |
+|------|-------|
+| Length | 560 mm |
+| Width | 302 mm |
+| Height | 160 mm |
+| Wheelbase | 360 mm |
+| Front Track | 302 mm |
+| Rear Track | 296 mm |
+| Total Weight | ~2.35 kg |
+| Drive | 4WD |
+| Shocks | Oil-filled 17mm, #600 silicone oil |
+| Spring Rate | 0.45 kgf/cm |
