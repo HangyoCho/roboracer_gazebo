@@ -41,7 +41,7 @@
   <!-- cmd_vel + AckermannDriveStamped → joint controller bridge -->
   <node name="twist_to_joints" pkg="unicorn_model" type="twist_to_joints.py" output="screen">
     <param name="wheelbase" value="0.325"/>
-    <param name="track_width" value="0.2"/>
+    <param name="width" value="0.2"/>
     <param name="wheel_radius" value="0.05"/>
     <param name="max_steer" value="0.8"/>
     <param name="robot_ns" value="/unicorn"/>
