@@ -53,14 +53,14 @@
     <param name="wheelbase" value="0.360"/>
     <param name="width" value="0.255"/>
     <param name="wheel_radius" value="0.055"/>
-    <param name="max_steer" value="0.52"/>
+    <param name="max_steer" value="0.6632"/>
     <param name="robot_ns" value="/unicorn"/>
     <param name="ackermann_topic" value="/vesc/low_level/ackermann_cmd_mux/output"/>
   </node>
  
   <!-- Joystick teleop -->
   <node pkg="joy" type="joy_node" name="joy_node" output="screen">
-    <param name="dev" value="/dev/input/js0"/>
+    <param name="dev" value="/dev/input/js1"/>
     <param name="deadzone" value="0.3"/>
     <param name="autorepeat_rate" value="20"/>
   </node>
@@ -68,8 +68,8 @@
   <node pkg="unicorn_model" type="simple_mux.py" name="simple_mux" output="screen">
     <param name="out_topic" value="/vesc/low_level/ackermann_cmd_mux/output"/>
     <param name="in_topic" value="/vesc/high_level/ackermann_cmd_mux/input/nav_1"/>
-    <param name="max_speed" value="6.0"/>
-    <param name="max_steer" value="0.52"/>
+    <param name="max_speed" value="15.0"/>
+    <param name="max_steer" value="0.6632"/>
   </node>
 
   <!-- PCD map visualization -->
