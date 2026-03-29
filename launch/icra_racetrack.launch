@@ -6,7 +6,7 @@
   <arg name="teleop" default="true"/>
 
   <!-- Spawn position on the track (adjust as needed) -->
-  <arg name="x" default="2.8"/>
+  <arg name="x" default="1.8"/>
   <arg name="y" default="-9.0"/>
   <arg name="z" default="0.7"/>
   <arg name="yaw" default="-1.5708"/>
