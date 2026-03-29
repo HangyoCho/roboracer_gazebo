@@ -6,8 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Odometry1
       Splitter Ratio: 0.5
-    Tree Height: 617
+    Tree Height: 814
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -235,7 +236,7 @@ Visualization Manager:
       Color: 255; 255; 0
       Color Transformer: AxisColor
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -250,7 +251,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz/Axes
       Enabled: false
@@ -297,11 +298,20 @@ Visualization Manager:
       Value: true
     - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /global_waypoints/markers
+      Marker Topic: /gazebo/static_obstacles/markers
       Name: MarkerArray
       Namespaces:
-        "": true
+        obstacles: true
       Queue Size: 100
+      Value: true
+    - Class: rviz/InteractiveMarkers
+      Enable Transparency: true
+      Enabled: true
+      Name: InteractiveMarkers
+      Show Axes: false
+      Show Descriptions: true
+      Show Visual Aids: false
+      Update Topic: /obstacle_manager/update
       Value: true
   Enabled: true
   Global Options:
@@ -317,11 +327,21 @@ Visualization Manager:
     - Class: rviz/Select
     - Class: rviz/FocusCamera
     - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
+      Topic: initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
+    - Class: rviz/SetGoal
+      Topic: goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
   Value: true
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8.79878044128418
+      Distance: 36.79391098022461
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -329,25 +349,25 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.2154643535614014
-        Y: -3.289623260498047
-        Z: 6.067480564117432
+        X: 2.3046724796295166
+        Y: -4.876728057861328
+        Z: 5.99752950668335
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.0999999046325684
+      Pitch: 0.31999993324279785
       Target Frame: <Fixed Frame>
-      Yaw: 0.5299999713897705
+      Yaw: 6.068183898925781
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 846
+  Height: 1043
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd000000010000000000000156000002f4fc0200000001fb000000100044006900730070006c006100790073010000003d000002f4000000c900ffffff000002dc000002f400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
-  Width: 1080
-  X: 3840
+  QMainWindow State: 000000ff00000000fd000000010000000000000156000003b9fc0200000001fb000000100044006900730070006c006100790073010000003d000003b9000000c900ffffff00000624000003b900000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Width: 1920
+  X: 3000
   Y: 492
