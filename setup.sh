@@ -11,8 +11,8 @@ THIRDPARTY="$SCRIPT_DIR/thirdparty"
 echo "=== Unicorn Model Setup ==="
 
 # 1. Install system dependencies
-echo "[1/4] Checking system dependencies..."
-DEPS=(libapr1-dev libpcl-dev ros-noetic-pcl-ros ros-noetic-gazebo-ros-control ros-noetic-effort-controllers ros-noetic-joint-state-controller)
+echo "[1/5] Checking system dependencies..."
+DEPS=(libapr1-dev libpcl-dev ros-noetic-pcl-ros ros-noetic-gazebo-ros-control ros-noetic-effort-controllers ros-noetic-velocity-controllers ros-noetic-joint-state-controller)
 MISSING=()
 for dep in "${DEPS[@]}"; do
     if ! dpkg -s "$dep" &>/dev/null; then
@@ -29,7 +29,7 @@ else
 fi
 
 # 2. Build Livox-SDK
-echo "[2/4] Building Livox-SDK..."
+echo "[2/5] Building Livox-SDK..."
 if [ ! -f "$THIRDPARTY/Livox-SDK/build/sdk_core/liblivox_sdk_static.a" ]; then
     mkdir -p "$THIRDPARTY/Livox-SDK/build"
     cd "$THIRDPARTY/Livox-SDK/build"
@@ -41,7 +41,7 @@ else
 fi
 
 # 3. Create symlinks for catkin
-echo "[3/4] Creating symlinks..."
+echo "[3/5] Creating symlinks..."
 for pkg in livox_laser_simulation livox_ros_driver; do
     target="$THIRDPARTY/$pkg"
     link="$WS_SRC/$pkg"
@@ -56,7 +56,12 @@ for pkg in livox_laser_simulation livox_ros_driver; do
 done
 
 # 4. Build workspace
-echo "[4/4] Building workspace..."
+# 4. Install Python dependencies
+echo "[4/5] Installing Python dependencies..."
+pip3 install -r "$SCRIPT_DIR/requirements.txt"
+
+# 5. Build workspace
+echo "[5/5] Building workspace..."
 cd "$WS_SRC/.."
 catkin_make
 source devel/setup.bash
