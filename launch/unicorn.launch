@@ -41,7 +41,7 @@
   <!-- cmd_vel + AckermannDriveStamped → joint controller bridge -->
   <node name="twist_to_joints" pkg="unicorn_model" type="twist_to_joints.py" output="screen">
     <param name="wheelbase" value="0.325"/>
-    <param name="track_width" value="0.2"/>
+    <param name="width" value="0.2"/>
     <param name="wheel_radius" value="0.05"/>
     <param name="max_steer" value="0.8"/>
     <param name="robot_ns" value="/unicorn"/>
@@ -51,6 +51,28 @@
   <!-- Keyboard teleop (separate xterm window) -->
   <node if="$(arg teleop)" name="keyboard_teleop" pkg="unicorn_model" type="keyboard_teleop.py"
         output="screen" launch-prefix="gnome-terminal --"/>
+
+  <!-- Simple mux: LB=manual, RB=auto (/vesc/high_level/ackermann_cmd_mux/input/nav_1) -->
+  <node pkg="unicorn_model" type="simple_mux.py" name="simple_mux" output="screen">
+    <param name="out_topic" value="/vesc/low_level/ackermann_cmd_mux/output"/>
+    <param name="in_topic" value="/vesc/high_level/ackermann_cmd_mux/input/nav_1"/>
+    <param name="max_speed" value="6.0"/>
+    <param name="max_steer" value="0.52"/>
+  </node>
+
+  <!-- Spawn/delete obstacles via RViz 2D Nav Goal + joystick -->
+  <node pkg="unicorn_model" type="obstacle_spawner.py" name="obstacle_spawner" output="screen">
+    <param name="size_x" value="0.4"/>
+    <param name="size_y" value="0.3"/>
+    <param name="size_z" value="0.2"/>
+    <param name="delete_button" value="7"/>
+  </node>
+
+  <!-- Teleport robot via RViz 2D Pose Estimate -->
+  <node pkg="unicorn_model" type="pose_teleport.py" name="pose_teleport" output="screen"/>
+
+  <!-- Ground truth pose at rear axle center -->
+  <node pkg="unicorn_model" type="gt_pose_publisher.py" name="gt_pose_publisher" output="screen"/>
 
   <!-- RViz -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" output="screen"/>

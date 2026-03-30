@@ -19,7 +19,7 @@ class TwistToJoints:
         rospy.init_node('twist_to_joints')
 
         self.wheelbase = rospy.get_param('~wheelbase', 0.325)
-        self.track_width = rospy.get_param('~track_width', 0.2)
+        self.width = rospy.get_param('~width', 0.2)
         self.wheel_radius = rospy.get_param('~wheel_radius', 0.05)
         self.max_steer = rospy.get_param('~max_steer', 0.8)
 
@@ -43,6 +43,7 @@ class TwistToJoints:
 
         self.last_cmd_time = rospy.Time.now()
         self.cmd_timeout = rospy.get_param('~cmd_timeout', 0.2)
+
 
         rospy.Subscriber('/cmd_vel', Twist, self.cmd_vel_callback)
         rospy.Subscriber(ackermann_topic, AckermannDriveStamped, self.ackermann_callback)
@@ -69,8 +70,8 @@ class TwistToJoints:
         # Ackermann inner/outer wheel differentiation
         if abs(steer_angle) > 0.001:
             R = self.wheelbase / math.tan(abs(steer_angle))
-            inner = math.atan(self.wheelbase / (R - self.track_width / 2))
-            outer = math.atan(self.wheelbase / (R + self.track_width / 2))
+            inner = math.atan(self.wheelbase / (R - self.width / 2))
+            outer = math.atan(self.wheelbase / (R + self.width / 2))
             if steer_angle > 0:
                 left_steer = inner
                 right_steer = outer

@@ -26,6 +26,12 @@ def quat_rotate(q, v):
     )
 
 
+def quat_inv_rotate(q, v):
+    """Rotate vector v by inverse of quaternion q (world -> body frame)"""
+    x, y, z, w = q
+    return quat_rotate((-x, -y, -z, w), v)
+
+
 class GTPosePublisher:
     def __init__(self):
         rospy.init_node('gt_pose_publisher')
@@ -89,7 +95,14 @@ class GTPosePublisher:
         base_odom.header.frame_id = 'map'
         base_odom.child_frame_id = 'base_link'
         base_odom.pose.pose = pose
-        base_odom.twist.twist = twist
+        lv = quat_inv_rotate(q, (twist.linear.x, twist.linear.y, twist.linear.z))
+        av = quat_inv_rotate(q, (twist.angular.x, twist.angular.y, twist.angular.z))
+        base_odom.twist.twist.linear.x = lv[0]
+        base_odom.twist.twist.linear.y = lv[1]
+        base_odom.twist.twist.linear.z = lv[2]
+        base_odom.twist.twist.angular.x = av[0]
+        base_odom.twist.twist.angular.y = av[1]
+        base_odom.twist.twist.angular.z = av[2]
         self.base_odom_pub.publish(base_odom)
 
         # --- imu/lidar frame (livox_mid360) ---
@@ -112,7 +125,12 @@ class GTPosePublisher:
         imu_odom.header.frame_id = 'map'
         imu_odom.child_frame_id = 'imu'
         imu_odom.pose.pose = imu_ps.pose
-        imu_odom.twist.twist = twist
+        imu_odom.twist.twist.linear.x = lv[0]
+        imu_odom.twist.twist.linear.y = lv[1]
+        imu_odom.twist.twist.linear.z = lv[2]
+        imu_odom.twist.twist.angular.x = av[0]
+        imu_odom.twist.twist.angular.y = av[1]
+        imu_odom.twist.twist.angular.z = av[2]
         self.imu_odom_pub.publish(imu_odom)
 
 
