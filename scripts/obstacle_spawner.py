@@ -69,8 +69,8 @@ class ObstacleSpawner:
 
         rospy.wait_for_service('/gazebo/spawn_sdf_model', timeout=10)
         rospy.wait_for_service('/gazebo/delete_model', timeout=10)
-        self.spawn_srv = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel, persistent=True)
-        self.delete_srv = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel, persistent=True)
+        self.spawn_srv = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
+        self.delete_srv = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
         self.pause_srv = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.unpause_srv = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
 
@@ -90,8 +90,8 @@ class ObstacleSpawner:
         self._make_delete_button()
 
         # Subscribers
-        rospy.Subscriber('/goal', PoseStamped, self.goal_cb)
-        rospy.Subscriber('/move_base_simple/goal', PoseStamped, self.goal_cb)
+        rospy.Subscriber('/goal', PoseStamped, self.goal_cb, queue_size=10, tcp_nodelay=True)
+        rospy.Subscriber('/move_base_simple/goal', PoseStamped, self.goal_cb, queue_size=10, tcp_nodelay=True)
         rospy.Subscriber('/joy', Joy, self.joy_cb)
         rospy.Subscriber('/gazebo/model_states', ModelStates, self.model_states_cb,
                          queue_size=1, buff_size=2**24, tcp_nodelay=True)
@@ -136,6 +136,7 @@ class ObstacleSpawner:
     # ---- Spawn ----
 
     def goal_cb(self, msg):
+        rospy.loginfo("goal_cb called: (%.2f, %.2f)", msg.pose.position.x, msg.pose.position.y)
         with self.lock:
             if self.deleting:
                 rospy.logwarn("Delete in progress, ignoring spawn request")
@@ -148,6 +149,7 @@ class ObstacleSpawner:
         threading.Thread(target=self._spawn_obstacle, args=(name, x, y, ori), daemon=True).start()
 
     def _spawn_obstacle(self, name, x, y, ori):
+        rospy.loginfo("_spawn_obstacle: calling spawn_srv for '%s'", name)
         sdf = OBSTACLE_SDF.format(
             name=name,
             sx=self.size_x, sy=self.size_y, sz=self.size_z
@@ -159,6 +161,7 @@ class ObstacleSpawner:
         pose.orientation = ori
         try:
             resp = self.spawn_srv(name, sdf, "", pose, "world")
+            rospy.loginfo("_spawn_obstacle: resp.success=%s", resp.success)
             if resp.success:
                 radius = math.sqrt(self.size_x**2 + self.size_y**2) / 2.0
                 with self.lock:
