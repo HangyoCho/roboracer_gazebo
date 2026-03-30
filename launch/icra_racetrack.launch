@@ -68,7 +68,7 @@
   <node pkg="unicorn_model" type="simple_mux.py" name="simple_mux" output="screen">
     <param name="out_topic" value="/vesc/low_level/ackermann_cmd_mux/output"/>
     <param name="in_topic" value="/vesc/high_level/ackermann_cmd_mux/input/nav_1"/>
-    <param name="max_speed" value="15.0"/>
+    <param name="max_speed" value="5.0"/>
     <param name="max_steer" value="0.6632"/>
   </node>
 
