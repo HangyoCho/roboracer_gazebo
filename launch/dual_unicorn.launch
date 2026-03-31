@@ -1,5 +1,5 @@
 <launch>
-  <arg name="model" default="$(find unicorn_model)/urdf/unicorn.urdf"/>
+  <arg name="model" default="$(find roboracer_gazebo)/urdf/unicorn.urdf"/>
   <arg name="world" default="worlds/empty.world"/>
   <arg name="gui" default="true"/>
   <arg name="use_sim_time" default="true"/>
@@ -28,7 +28,7 @@
 
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
 
-    <rosparam file="$(find unicorn_model)/config/unicorn_control.yaml" command="load" ns="control"/>
+    <rosparam file="$(find roboracer_gazebo)/config/unicorn_control.yaml" command="load" ns="control"/>
   </group>
 
   <!-- ==================== Unicorn 2 ==================== -->
@@ -45,6 +45,6 @@
 
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
 
-    <rosparam file="$(find unicorn_model)/config/unicorn_control.yaml" command="load" ns="control"/>
+    <rosparam file="$(find roboracer_gazebo)/config/unicorn_control.yaml" command="load" ns="control"/>
   </group>
 </launch>

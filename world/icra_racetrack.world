@@ -88,7 +88,7 @@
         <collision name='collision'>
           <geometry>
             <mesh>
-              <uri>model://unicorn_model/world/mesh/icra_racetrack.stl</uri>
+              <uri>model://roboracer_gazebo/world/mesh/icra_racetrack.stl</uri>
               <scale>0.001 0.001 0.001</scale>
             </mesh>
           </geometry>
@@ -104,7 +104,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://unicorn_model/world/mesh/icra_racetrack.stl</uri>
+              <uri>model://roboracer_gazebo/world/mesh/icra_racetrack.stl</uri>
               <scale>0.001 0.001 0.001</scale>
             </mesh>
           </geometry>

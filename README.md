@@ -22,9 +22,9 @@ Gazebo simulation package for a 1/10 scale autonomous racing vehicle equipped wi
 
 ```bash
 mkdir -p ~/ws_gazebo_roboracer/src && cd ~/ws_gazebo_roboracer/src
-git clone git@github.com:HangyoCho/roboracer_gazebo.git unicorn_model
+git clone git@github.com:HangyoCho/roboracer_gazebo.git
 
-cd unicorn_model
+cd roboracer_gazebo
 ./setup.sh
 
 source ~/ws_gazebo_roboracer/devel/setup.bash
@@ -34,19 +34,19 @@ source ~/ws_gazebo_roboracer/devel/setup.bash
 
 ```bash
 # Single vehicle with keyboard teleop on ICRA racetrack
-roslaunch unicorn_model icra_racetrack.launch
+roslaunch roboracer_gazebo icra_racetrack.launch
 
 # Single vehicle (default world)
-roslaunch unicorn_model unicorn.launch
+roslaunch roboracer_gazebo unicorn.launch
 
 # Without teleop
-roslaunch unicorn_model unicorn.launch teleop:=false
+roslaunch roboracer_gazebo unicorn.launch teleop:=false
 
 # Two vehicles
-roslaunch unicorn_model dual_unicorn.launch
+roslaunch roboracer_gazebo dual_unicorn.launch
 
 # Headless (no GUI)
-roslaunch unicorn_model unicorn.launch gui:=false
+roslaunch roboracer_gazebo unicorn.launch gui:=false
 ```
 
 ## Topics
@@ -70,7 +70,7 @@ map -> base_link -> chassis
 ## Project Structure
 
 ```
-unicorn_model/
+roboracer_gazebo/
 ├── config/          # Controller PID parameters
 ├── docs/            # Detailed documentation
 ├── launch/          # Launch files
