@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <robot name="unicorn" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find unicorn_model)/urdf/macros.xacro" />
-  <xacro:include filename="$(find unicorn_model)/urdf/auto_inertial.xacro"/>
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/macros.xacro" />
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/auto_inertial.xacro"/>
 
   <!-- ==================== Chassis ==================== -->
 
@@ -184,7 +184,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://livox_laser_simulation/meshes/livox_mid40.dae"/>
+        <mesh filename="package://roboracer_gazebo/meshes/mid360.stl"/>
       </geometry>
     </visual>
   </link>
@@ -278,7 +278,7 @@
 
   <!-- ==================== Gazebo plugins ==================== -->
 
-  <xacro:include filename="$(find unicorn_model)/urdf/unicorn.gazebo" />
-  <xacro:include filename="$(find unicorn_model)/urdf/materials.xacro" />
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/unicorn.gazebo" />
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/materials.xacro" />
 
 </robot>

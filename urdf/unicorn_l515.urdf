@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+<robot name="unicorn" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/macros.xacro" />
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/auto_inertial.xacro"/>
+  <xacro:include filename="$(find realsense2_description)/urdf/_l515.urdf.xacro" />
+
+  <!-- ==================== Chassis ==================== -->
+
+  <link name="base_link" />
+
+  <link name="chassis">
+    <visual>
+      <xacro:chassis_geometry/>
+      <material name="blue" />
+    </visual>
+    <inertial>
+      <xacro:chassis_inertial_params />
+    </inertial>
+  </link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="chassis" />
+  </joint>
+
+  <link name="base_footprint"/>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0.0 0.0 -0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ==================== Rear Wheels ==================== -->
+
+  <link name="left_rear_wheel">
+    <inertial>
+      <xacro:left_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_rear_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:left_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="left_rear_wheel_joint" type="continuous">
+    <origin xyz="0 0.1275 0" rpy="1.5708 0 0" />
+    <parent link="chassis" />
+    <child link="left_rear_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="100" velocity="273" />
+    <dynamics damping="0.02" friction="0.1"/>
+  </joint>
+
+  <xacro:wheel_transmission name="left_rear_wheel" />
+
+  <link name="right_rear_wheel">
+    <inertial>
+      <xacro:right_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_rear_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:right_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="right_rear_wheel_joint" type="continuous">
+    <origin xyz="0 -0.1275 0" rpy="1.5708 0 0" />
+    <parent link="chassis" />
+    <child link="right_rear_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="100" velocity="273" />
+    <dynamics damping="0.02" friction="0.1"/>
+  </joint>
+
+  <xacro:wheel_transmission name="right_rear_wheel" />
+
+  <!-- ==================== Steering + Front Wheels ==================== -->
+
+  <link name="left_steering_hinge">
+    <inertial>
+      <xacro:steering_hinge_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_steering_hinge_geometry />
+      <material name="grey" />
+    </visual>
+  </link>
+
+  <joint name="left_steering_hinge_joint" type="revolute">
+    <origin xyz="0.360 0.1275 0" rpy="0 1.5708 0" />
+    <parent link="chassis" />
+    <child link="left_steering_hinge" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-1.08" upper="1.08" effort="50" velocity="100" />
+    <dynamics damping="0.1" friction="0.0"/>
+  </joint>
+
+  <xacro:steering_hinge_transmission name="left_steering_hinge" />
+
+  <link name="right_steering_hinge">
+    <inertial>
+      <xacro:steering_hinge_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_steering_hinge_geometry />
+      <material name="grey" />
+    </visual>
+  </link>
+
+  <joint name="right_steering_hinge_joint" type="revolute">
+    <origin xyz="0.360 -0.1275 0" rpy="0 1.5708 0" />
+    <parent link="chassis" />
+    <child link="right_steering_hinge" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-1.08" upper="1.08" effort="50" velocity="100" />
+    <dynamics damping="0.1" friction="0.0"/>
+  </joint>
+
+  <xacro:steering_hinge_transmission name="right_steering_hinge" />
+
+  <link name="left_front_wheel">
+    <inertial>
+      <xacro:left_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_front_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:left_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="left_front_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="1.5708 0 0" />
+    <parent link="left_steering_hinge" />
+    <child link="left_front_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="100" velocity="273" />
+    <dynamics damping="0.02" friction="0.1"/>
+  </joint>
+
+  <xacro:wheel_transmission name="left_front_wheel" />
+
+  <link name="right_front_wheel">
+    <inertial>
+      <xacro:right_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_front_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:right_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="right_front_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="1.5708 0 0" />
+    <parent link="right_steering_hinge" />
+    <child link="right_front_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="100" velocity="273"/>
+    <dynamics damping="0.02" friction="0.1"/>
+  </joint>
+
+  <xacro:wheel_transmission name="right_front_wheel" />
+
+  <!-- ==================== Livox Mid-360 3D LiDAR ==================== -->
+
+  <link name="livox_mid360">
+    <inertial>
+      <mass value="0.265"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://roboracer_gazebo/meshes/mid360.stl"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="livox_mid360_joint" type="fixed">
+    <origin xyz="0.26 0.0 0.08" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="livox_mid360"/>
+  </joint>
+
+  <!-- imu / lidar TF aliases for GLIM -->
+  <link name="imu"/>
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="livox_mid360"/>
+    <child link="imu"/>
+  </joint>
+
+  <link name="lidar"/>
+  <joint name="lidar_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="livox_mid360"/>
+    <child link="lidar"/>
+  </joint>
+
+  <xacro:property name="laser_min_range" value="0.1"/>
+  <xacro:property name="laser_max_range" value="60.0"/>
+  <xacro:property name="ros_topic" value="livox/lidar"/>
+  <xacro:property name="samples" value="20000"/>
+  <xacro:property name="downsample" value="1"/>
+  <xacro:property name="csv_file_name" value="package://livox_laser_simulation/scan_mode/mid360-real-centr.csv"/>
+  <xacro:property name="publish_pointcloud_type" value="1"/>
+
+  <gazebo reference="livox_mid360">
+    <sensor type="ray" name="livox_mid360">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <plugin name="gazebo_ros_laser_controller" filename="liblivox_laser_simulation.so">
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>100</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.1415926535897931</min_angle>
+              <max_angle>3.1415926535897931</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>50</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.1415926535897931</min_angle>
+              <max_angle>3.1415926535897931</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>${laser_min_range}</min>
+            <max>${laser_max_range}</max>
+            <resolution>0.002</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.001</stddev>
+          </noise>
+        </ray>
+        <visualize>false</visualize>
+        <samples>${samples}</samples>
+        <downsample>${downsample}</downsample>
+        <csv_file_name>${csv_file_name}</csv_file_name>
+        <publish_pointcloud_type>${publish_pointcloud_type}</publish_pointcloud_type>
+        <ros_topic>${ros_topic}</ros_topic>
+      </plugin>
+    </sensor>
+    <sensor name="livox_imu" type="imu">
+      <always_on>true</always_on>
+      <update_rate>200</update_rate>
+      <visualize>false</visualize>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>/livox/imu</topicName>
+        <bodyName>livox_mid360</bodyName>
+        <updateRateHZ>200.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0.05512 0.02226 -0.0297</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>livox_mid360</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0.05512 0.02226 -0.0297 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+  <!-- ==================== Intel RealSense L515 (front-mounted) ==================== -->
+  <!-- Mounted ahead of front axle (x=0.40), centered, slightly above chassis -->
+  <xacro:sensor_l515 parent="base_link" name="camera" topics_ns="camera"
+                     use_nominal_extrinsics="true" publish_pointcloud="true"
+                     add_plug="false" use_mesh="true">
+    <origin xyz="0.40 0.0 0.06" rpy="0 0 0"/>
+  </xacro:sensor_l515>
+
+  <!-- ==================== Gazebo plugins ==================== -->
+
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/unicorn.gazebo" />
+  <xacro:include filename="$(find roboracer_gazebo)/urdf/materials.xacro" />
+
+</robot>

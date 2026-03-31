@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<!--
+License: Apache 2.0. See LICENSE file in root directory.
+
+Gazebo sensor definition for Intel RealSense L515 LiDAR camera.
+Color + Depth at 640x480 @40fps, no IR.
+
+Fitted to L515 datasheet (Rev 002):
+  Depth: LiDAR, 70deg HFOV, 0.25-9m range
+  Distance noise: stddev(d) = 0.004 + 0.00111*d [m]
+-->
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="gazebo_l515" params="camera_name reference_link topics_ns depth_optical_frame color_optical_frame infrared_optical_frame publish_pointcloud:=true" >
+
+    <xacro:property name="deg_to_rad" value="0.01745329251994329577" />
+
+    <gazebo reference="${reference_link}">
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <gravity>1</gravity>
+      <mu2>1</mu2>
+      <fdir1>0 0 0</fdir1>
+      <kp>1e+13</kp>
+      <kd>1</kd>
+
+      <!-- L515 Color Camera: 1920x1080 @ 10fps -->
+      <sensor name="${camera_name}color" type="camera">
+        <camera name="${camera_name}">
+          <horizontal_fov>${70.0*deg_to_rad}</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+            <format>RGB_INT8</format>
+          </image>
+          <clip>
+            <near>0.25</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.006</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+
+      <!-- L515 Depth Camera: 1024x768 @ 10fps (786K points/frame, full res) -->
+      <sensor name="${camera_name}depth" type="depth">
+        <camera name="${camera_name}">
+          <horizontal_fov>${70.0*deg_to_rad}</horizontal_fov>
+          <image>
+            <width>1024</width>
+            <height>768</height>
+          </image>
+          <clip>
+            <near>0.25</near>
+            <far>15</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.0</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+    </gazebo>
+
+    <!-- Realsense L515 camera plugin -->
+    <gazebo>
+      <plugin name="${topics_ns}" filename="librealsense_gazebo_plugin.so">
+        <prefix>${camera_name}</prefix>
+        <depthUpdateRate>10.0</depthUpdateRate>
+        <colorUpdateRate>10.0</colorUpdateRate>
+        <infraredUpdateRate>1.0</infraredUpdateRate>
+        <depthTopicName>depth/image_raw</depthTopicName>
+        <depthCameraInfoTopicName>depth/camera_info</depthCameraInfoTopicName>
+        <colorTopicName>color/image_raw</colorTopicName>
+        <colorCameraInfoTopicName>color/camera_info</colorCameraInfoTopicName>
+        <colorOpticalframeName>${color_optical_frame}</colorOpticalframeName>
+        <depthOpticalframeName>${depth_optical_frame}</depthOpticalframeName>
+        <rangeMinDepth>0.25</rangeMinDepth>
+        <rangeMaxDepth>9.0</rangeMaxDepth>
+        <pointCloud>${publish_pointcloud}</pointCloud>
+        <pointCloudTopicName>depth/color/points</pointCloudTopicName>
+        <pointCloudCutoff>0.25</pointCloudCutoff>
+        <pointCloudCutoffMax>9.0</pointCloudCutoffMax>
+        <depthNoiseBase>0.004</depthNoiseBase>
+        <depthNoiseSlope>0.00111</depthNoiseSlope>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+</robot>

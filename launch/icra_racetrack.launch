@@ -1,6 +1,6 @@
 <launch>
-  <arg name="model" default="$(find unicorn_model)/urdf/unicorn.urdf"/>
-  <arg name="rvizconfig" default="$(find unicorn_model)/rviz/urdf_config.rviz"/>
+  <arg name="model" default="$(find roboracer_gazebo)/urdf/unicorn_l515_pitched.urdf"/>
+  <arg name="rvizconfig" default="$(find roboracer_gazebo)/rviz/urdf_config.rviz"/>
   <arg name="gui" default="true"/>
   <arg name="use_sim_time" default="true"/>
   <arg name="teleop" default="true"/>
@@ -13,16 +13,19 @@
 
   <param name="use_sim_time" value="$(arg use_sim_time)"/>
 
-  <!-- Add unicorn_model parent to GAZEBO_MODEL_PATH so model:// URIs resolve -->
+  <!-- Add roboracer_gazebo parent to GAZEBO_MODEL_PATH so model:// URIs resolve -->
   <env name="GAZEBO_MODEL_PATH"
-       value="$(find unicorn_model)/..:$(optenv GAZEBO_MODEL_PATH )"/>
+       value="$(find roboracer_gazebo)/..:$(optenv GAZEBO_MODEL_PATH )"/>
+  <!-- Realsense gazebo plugin path -->
+  <env name="GAZEBO_PLUGIN_PATH"
+       value="$(find roboracer_gazebo)/../../devel/lib:$(optenv GAZEBO_PLUGIN_PATH)"/>
 
   <!-- Load robot description -->
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
 
   <!-- Gazebo with ICRA racetrack world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find unicorn_model)/world/icra_racetrack.world"/>
+    <arg name="world_name" value="$(find roboracer_gazebo)/world/icra_racetrack.world"/>
     <arg name="gui" value="$(arg gui)"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
@@ -43,13 +46,13 @@
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
 
   <!-- Controllers -->
-  <rosparam file="$(find unicorn_model)/config/unicorn_control.yaml" command="load" ns="/unicorn"/>
+  <rosparam file="$(find roboracer_gazebo)/config/unicorn_control.yaml" command="load" ns="/unicorn"/>
 <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="--namespace=/unicorn joint_state_controller left_steering_controller right_steering_controller left_rear_wheel_controller right_rear_wheel_controller left_front_wheel_controller right_front_wheel_controller"
         output="screen"/>
 
   <!-- cmd_vel + AckermannDriveStamped → joint controller bridge -->
-  <node name="twist_to_joints" pkg="unicorn_model" type="twist_to_joints.py" output="screen">
+  <node name="twist_to_joints" pkg="roboracer_gazebo" type="twist_to_joints.py" output="screen">
     <param name="wheelbase" value="0.360"/>
     <param name="width" value="0.255"/>
     <param name="wheel_radius" value="0.055"/>
@@ -65,7 +68,7 @@
     <param name="autorepeat_rate" value="20"/>
   </node>
   <!-- Simple mux: LB=manual, RB=auto (/vesc/high_level/ackermann_cmd_mux/input/nav_1) -->
-  <node pkg="unicorn_model" type="simple_mux.py" name="simple_mux" output="screen">
+  <node pkg="roboracer_gazebo" type="simple_mux.py" name="simple_mux" output="screen">
     <param name="out_topic" value="/vesc/low_level/ackermann_cmd_mux/output"/>
     <param name="in_topic" value="/vesc/high_level/ackermann_cmd_mux/input/nav_1"/>
     <param name="max_speed" value="6.0"/>
@@ -73,15 +76,15 @@
   </node>
 
   <!-- PCD map visualization -->
-  <node pkg="unicorn_model" type="pcd_publisher.py" name="pcd_publisher" output="screen">
-    <param name="pcd_file" value="$(find unicorn_model)/maps/icra_racetrack/icra_racetrack.pcd"/>
+  <node pkg="roboracer_gazebo" type="pcd_publisher.py" name="pcd_publisher" output="screen">
+    <param name="pcd_file" value="$(find roboracer_gazebo)/maps/icra_racetrack/icra_racetrack.pcd"/>
     <param name="topic" value="/pcd_map"/>
     <param name="frame_id" value="map"/>
     <param name="rate" value="1.0"/>
   </node>
 
   <!-- Spawn/delete obstacles via RViz Publish Point + joystick -->
-  <node pkg="unicorn_model" type="obstacle_spawner.py" name="obstacle_spawner" output="screen">
+  <node pkg="roboracer_gazebo" type="obstacle_spawner.py" name="obstacle_spawner" output="screen">
     <param name="size_x" value="0.4"/>
     <param name="size_y" value="0.3"/>
     <param name="size_z" value="0.2"/>
@@ -89,11 +92,11 @@
   </node>
 
   <!-- Teleport robot via RViz 2D Pose Estimate -->
-  <node pkg="unicorn_model" type="pose_teleport.py" name="pose_teleport" output="screen"/>
+  <node pkg="roboracer_gazebo" type="pose_teleport.py" name="pose_teleport" output="screen"/>
 
   <!-- Ground truth pose at rear axle center -->
-  <node pkg="unicorn_model" type="gt_pose_publisher.py" name="gt_pose_publisher" output="screen"/>
+  <node pkg="roboracer_gazebo" type="gt_pose_publisher.py" name="gt_pose_publisher" output="screen"/>
 
   <!-- RViz -->
-  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" output="screen"/> -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" output="screen"/>
 </launch>

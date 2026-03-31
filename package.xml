@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>unicorn_model</name>
+  <name>roboracer_gazebo</name>
   <version>1.0.0</version>
-  <description>Unicorn autonomous racing vehicle with Livox Mid-360</description>
-  <maintainer email="dev@unicorn.racing">unicorn</maintainer>
+  <description>Roboracer autonomous racing vehicle with Livox Mid-360</description>
+  <maintainer email="dev@roboracer.racing">roboracer</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
@@ -24,6 +24,8 @@
   <depend>effort_controllers</depend>
   <depend>joint_state_controller</depend>
   <depend>livox_laser_simulation</depend>
+  <depend>realsense2_description</depend>
+  <depend>realsense_gazebo_plugin</depend>
 
   <export>
     <gazebo_ros gazebo_model_path="${prefix}/.."/>
