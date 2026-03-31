@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(unicorn_model)
+project(roboracer_gazebo)
 
 add_compile_options(-std=c++14)
 
