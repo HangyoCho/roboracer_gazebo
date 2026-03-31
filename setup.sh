@@ -42,7 +42,7 @@ fi
 
 # 3. Create symlinks for catkin
 echo "[3/5] Creating symlinks..."
-for pkg in livox_laser_simulation livox_ros_driver; do
+for pkg in livox_laser_simulation livox_ros_driver realsense_gazebo_plugin realsense2_description; do
     target="$THIRDPARTY/$pkg"
     link="$WS_SRC/$pkg"
     if [ -L "$link" ]; then
